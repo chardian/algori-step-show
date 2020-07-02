@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 
 
 def random_color():
-	return [random.randint(55, 255), random.randint(55, 255), random.randint(55, 255)]
+	return [random.randint(55, 200), random.randint(55, 200), random.randint(55, 200)]
 
 
 class DisplayObject(object):
@@ -48,6 +48,12 @@ class Bar(DisplayObject):
 		self.height = self.value * 10
 		self.color = random_color()
 		self.txt = Text(str(value))
+		self.is_arrow = False  # 是否是箭头
+		self.is_p = False  # 是否是标兵
+		self.txt_arrow = Text('')
+		self.txt_p = Text('')
+		self.is_low = False
+		self.is_high = False
 
 	def update(self, delta):
 		if self.to_x != self.x and self.speed > 0:
@@ -59,11 +65,26 @@ class Bar(DisplayObject):
 			self.speed = 0
 
 	def render(self):
-		self.ui = pygame.draw.rect(screen, self.color, [self.x, self.y, self.width, self.height], 0)
+		cc = self.color
+		if self.is_low or self.is_high:
+			cc = [255, 255, 255]
+			ww = self.width + 10
+
+		self.ui = pygame.draw.rect(screen, cc, [self.x, self.y, self.width, self.height], 0)
 		# 画数字
 		self.txt.x = self.x + 5
 		self.txt.y = self.y - 50
 		self.txt.render()
+		if self.is_arrow:
+			self.txt_arrow.content = '↑'
+			self.txt_arrow.x = self.x
+			self.txt_arrow.y = SCREEN_HEIGHT - 40
+			self.txt_arrow.render()
+		if self.is_p:
+			self.txt_p.content = 'P'
+			self.txt_p.x = self.x
+			self.txt_p.y = SCREEN_HEIGHT - 120
+			self.txt_p.render()
 
 
 class Text(DisplayObject):
@@ -91,20 +112,28 @@ class BarChart(DisplayObject):
 		self.bar_gap = 40
 		self.title = ''
 		self.txt = Text('')
-		self.txt.x = SCREEN_WIDTH * 0.5
+		self.txt.x = SCREEN_WIDTH * 0.5 - 100
 		self.txt.y = SCREEN_HEIGHT - 50
 
 	def init_with_arr(self, arr):
 		for value in arr:
 			self.add_bar(value)
 
-	def update_with_arr(self, arr):
-		if arr is None:
-			pass
-		else:
-			for idx, v in enumerate(arr):
-				b = self.get_bar_by_val(v)
-				b.move_x(self.base_left + idx * self.bar_gap, 400)
+	def update_with_step(self, step):
+		print(step)
+		arr = step.arr
+		for idx, v in enumerate(arr):
+			b = self.get_bar_by_val(v)
+			b.move_x(self.base_left + idx * self.bar_gap, 400)
+			b.is_arrow = False
+			b.is_p = False
+			b.is_low = False
+			b.is_high = False
+		self.get_bar_by_val(arr[step.left_idx]).is_arrow = True
+		self.get_bar_by_val(arr[step.right_idx]).is_arrow = True
+		self.get_bar_by_val(arr[step.low]).is_low = True
+		self.get_bar_by_val(arr[step.high]).is_low = True
+		self.get_bar_by_val(step.p).is_p = True
 
 	def show_title(self, title):
 		self.txt.content = title
@@ -127,7 +156,6 @@ class BarChart(DisplayObject):
 				if event.type == pygame.QUIT:
 					exit()
 				elif event.type == pygame.KEYUP:
-					print('你点击了')
 					if self.on_next is not None:
 						self.on_next()
 
