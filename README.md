@@ -8,3 +8,4 @@
 
 ![图片](https://github.com/chardian/algori-step-show/blob/master/quick-sort.gif)
 
+说明见: http://www.zhaqijie.com/post/quick_sort/
