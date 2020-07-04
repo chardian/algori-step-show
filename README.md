@@ -9,3 +9,20 @@
 ![图片](quick-sort.gif)
 
 说明见: http://www.zhaqijie.com/post/quick_sort/
+
+
+## A* 算法
+
+运行方法：
+
+	python a_star.py
+	
+出现图形界面之后，可以点击添加障碍物，在障碍物上重复点击会消除障碍物
+
+然后按任意键开始查看A*寻路过程
+
+白色为走过的路
+
+红色为当前记录的路
+
+说明见：http://www.zhaqijie.com/post/a_star/
