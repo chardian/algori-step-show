@@ -6,7 +6,7 @@
 出现图形界面之后,按任意键开始查看排序过程
 
 
-![图片](quick-sort.gif)
+![图片](http://www.zhaqijie.com/resources/quick-sort.gif)
 
 说明见: http://www.zhaqijie.com/post/quick_sort/
 
@@ -24,5 +24,6 @@
 白色为走过的路
 
 红色为当前记录的路
+![](http://www.zhaqijie.com/resources/manual_a_star.gif)
 
 说明见：http://www.zhaqijie.com/post/a_star/
